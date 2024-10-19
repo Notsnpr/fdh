@@ -1,0 +1,50 @@
+.resume-analyzer {
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .file-input {
+    margin-bottom: 15px;
+    display: block;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+  }
+  
+  .submit-button {
+    margin-top: 10px !important;
+    margin-bottom: 20px !important;
+  }
+  
+  .analysis-results {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+    overflow-x: auto;
+  }
+  
+  .analysis-results pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  
+  @media (max-width: 600px) {
+    .resume-analyzer {
+      padding: 15px;
+    }
+  
+    .file-input,
+    .submit-button {
+      width: 100%;
+    }
+  }
