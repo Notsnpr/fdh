@@ -22,9 +22,8 @@ export default function App() {
       <div className="app">
         <AppBar position="static" className="app-bar">
           <Toolbar>
-            <img src="/placeholder.svg?height=40&width=40" alt="JobSync Logo" className="logo" />
+            <img src="https://fdh-logo.s3.us-east-2.amazonaws.com/JobSyncCorner.png" alt="JobSync Logo" className="logo" />
             <Typography variant="h6" component="div" className="app-title">
-              JobSync
             </Typography>
             <nav className="nav-links">
               <Button color="inherit" component={Link} to="/">Home</Button>
