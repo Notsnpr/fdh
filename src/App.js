@@ -39,7 +39,6 @@ export default function App() {
             </Link>
             <Typography variant="h6" component="div" className="app-title"></Typography>
             <nav className="nav-links">
-              <Button color="inherit" component={Link} to="/">Home</Button>
               <Button color="inherit" component={Link} to="/resume-analyzer">Resume Analyzer</Button>
               <Button color="inherit" component={Link} to="/job-matcher">Job Matcher</Button>
             </nav>
@@ -49,7 +48,7 @@ export default function App() {
             </IconButton>
           </Toolbar>
         </AppBar>
-        <LoginDialog open={loginOpen} handleClose={handleLoginClose} />
+        <LoginDialog open={loginOpen} onClose={handleLoginClose} />
         <Container maxWidth="lg" className="main-content">
           <Routes>
             <Route path="/" element={<Home />} />

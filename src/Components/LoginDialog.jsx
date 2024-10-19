@@ -1,47 +1,49 @@
 import React, { useState } from 'react';
-import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button } from '@mui/material';
-import './LoginDialog.css';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Typography } from '@mui/material';
 
-export default function LoginDialog({ open, handleClose }) {
-  const [username, setUsername] = useState('');
+export default function LoginDialog({ open, onClose }) {
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleLogin = () => {
-    alert(`Logging in with: ${username}`);
-    handleClose();
+    // Implement your login logic here.
+    console.log('Logging in with:', { email, password });
+    onClose();
   };
 
   return (
-    <Dialog open={open} onClose={handleClose} className="login-dialog">
-      <DialogTitle>Login</DialogTitle>
+    <Dialog open={open} onClose={onClose}>
+      <DialogTitle>Login to Your Account</DialogTitle>
       <DialogContent>
+        <Typography variant="body1" gutterBottom>
+          Please enter your email and password to login.
+        </Typography>
         <TextField
-          autoFocus
-          margin="dense"
-          id="username"
-          label="Email/Username"
-          type="text"
+          label="Email"
+          type="email"
           fullWidth
-          variant="standard"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          className="login-input"
+          variant="outlined"
+          margin="dense"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
         <TextField
-          margin="dense"
-          id="password"
           label="Password"
           type="password"
           fullWidth
-          variant="standard"
+          variant="outlined"
+          margin="dense"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="login-input"
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} className="cancel-btn">Cancel</Button>
-        <Button onClick={handleLogin} className="login-btn">Login</Button>
+        <Button onClick={onClose} color="secondary">
+          Cancel
+        </Button>
+        <Button onClick={handleLogin} color="primary">
+          Login
+        </Button>
       </DialogActions>
     </Dialog>
   );
