@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Typography } from '@mui/material';
+import './LoginDialog.css'
 
-export default function LoginDialog({ open, onClose }) {
+export default function LoginDialog({ open, onClose, onLoginSuccess }) { //Added onLoginSuccess 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleLogin = () => {
-    // Implement your login logic here.
     console.log('Logging in with:', { email, password });
+    onLoginSuccess(); //Notify that the user has logged in
     onClose();
   };
+  
 
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog open={open} onClose={onClose} className="login-dialog">
       <DialogTitle>Login to Your Account</DialogTitle>
       <DialogContent>
         <Typography variant="body1" gutterBottom>
