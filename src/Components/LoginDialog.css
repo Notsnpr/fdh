@@ -1,0 +1,23 @@
+.login-dialog .MuiDialog-paper {
+    border-radius: 10px;
+    padding: 20px;
+    background-color: #f9f9f9;
+  }
+  
+  .login-input {
+    margin-bottom: 15px;
+  }
+  
+  .cancel-btn {
+    color: red;
+  }
+  
+  .login-btn {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+  .login-btn:hover {
+    background-color: #45a049;
+  }
+  
