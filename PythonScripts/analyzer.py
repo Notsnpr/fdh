@@ -14,6 +14,8 @@ def return_Resume_Results(file, t, k,):
 # Configure with your API key directly (replace with your actual key)
 genai.configure(api_key="AIzaSyDD5M_mPhsO3yPHWsDqUSOiGOxyz7Mish4")
 
+resumeFile = "resumeExample.jpg"
+
 myfile = genai.upload_file("resumeExample.jpg")
 
 # Create the generative model
