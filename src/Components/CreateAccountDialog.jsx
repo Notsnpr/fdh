@@ -3,6 +3,8 @@ import { Dialog, DialogContent, Button, TextField, Typography, Link } from '@mui
 import './CreateAccountDialog.css';
 
 export default function CreateAccountDialog({ open, onClose, onCreateSuccess }) {
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -10,10 +12,11 @@ export default function CreateAccountDialog({ open, onClose, onCreateSuccess }) 
   const handleCreateAccount = (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      alert("Passwords don't match");
+      alert("Passwords don't match!");
       return;
     }
-    console.log('Creating account with:', { email, password });
+    console.log('Creating account with:', { firstName, lastName, email, password });
+    // Here you would typically make an API call to create the account
     onCreateSuccess();
     onClose();
   };
@@ -22,13 +25,37 @@ export default function CreateAccountDialog({ open, onClose, onCreateSuccess }) 
     <Dialog open={open} onClose={onClose} className="create-account-dialog">
       <DialogContent>
         <form className="form-container" onSubmit={handleCreateAccount}>
-          <h1 className="form-title primary">Create an Account</h1>
+          <h1 className="form-title primary">Create Account</h1>
           <div className="input-container">
-            <label htmlFor="create-email">Email*</label>
+            <label htmlFor="firstName">First Name*</label>
+            <TextField
+              required
+              type="text"
+              id="firstName"
+              placeholder="John"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              fullWidth
+            />
+          </div>
+          <div className="input-container">
+            <label htmlFor="lastName">Last Name*</label>
+            <TextField
+              required
+              type="text"
+              id="lastName"
+              placeholder="Doe"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              fullWidth
+            />
+          </div>
+          <div className="input-container">
+            <label htmlFor="email">Email*</label>
             <TextField
               required
               type="email"
-              id="create-email"
+              id="email"
               placeholder="example@xyz.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -36,22 +63,22 @@ export default function CreateAccountDialog({ open, onClose, onCreateSuccess }) 
             />
           </div>
           <div className="input-container">
-            <label htmlFor="create-password">Password*</label>
+            <label htmlFor="password">Password*</label>
             <TextField
               required
               type="password"
-              id="create-password"
+              id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               fullWidth
             />
           </div>
           <div className="input-container">
-            <label htmlFor="confirm-password">Confirm Password*</label>
+            <label htmlFor="confirmPassword">Confirm Password*</label>
             <TextField
               required
               type="password"
-              id="confirm-password"
+              id="confirmPassword"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               fullWidth
