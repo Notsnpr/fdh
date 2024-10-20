@@ -22,7 +22,6 @@ const Footer = () => {
             </Typography>
             <Link href="/" color="textSecondary" display="block">Home</Link>
             <Link href="/resume-analyzer" color="textSecondary" display="block">Resume Analyzer</Link>
-            <Link href="/job-matcher" color="textSecondary" display="block">Job Matcher</Link>
             <Link href="#" color="textSecondary" display="block">Privacy Policy</Link>
             <Link href="#" color="textSecondary" display="block">Terms of Service</Link>
           </Grid>
