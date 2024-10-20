@@ -1,79 +1,65 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
-import { AppBar, Toolbar, Typography, Container, Button, IconButton, Menu, MenuItem, ThemeProvider, createTheme, CssBaseline } from '@mui/material';
-import { AccountCircle, Menu as MenuIcon } from '@mui/icons-material';
+import { AppBar, Toolbar, Typography, Container, Button, ThemeProvider, createTheme, CssBaseline, IconButton, Box, Menu, MenuItem } from '@mui/material';
+import { AccountCircle as AccountCircleIcon } from '@mui/icons-material';
 import ResumeAnalyzer from './Components/ResumeAnalyzer';
 import ResumeAnalysisPage from './Components/ResumeAnalysisPage';
 import JobMatcher from './Components/JobMatcher';
+import Home from './Components/Home';
 import LoginDialog from './Components/LoginDialog';
 import CreateAccountDialog from './Components/CreateAccountDialog';
 import ForgotPasswordDialog from './Components/ForgotPasswordDialog';
-import SettingsPage from './Components/SettingsPage';
-import Footer from './Components/Footer';
-import HomePage from './Components/Home';
-import { db, auth } from './firebase.js';
 import './App.css';
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#1976d2',
+      main: '#7db3e8',
     },
     secondary: {
       main: '#dc004e',
     },
-    background: {
-      default: '#f5f5f5',
-    },
   },
 });
 
-export default function App() {
-  const [loginOpen, setLoginOpen] = useState(false);
-  const [createAccountOpen, setCreateAccountOpen] = useState(false);
-  const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+function App() {
   const [anchorEl, setAnchorEl] = useState(null);
-  const [mobileMenuAnchorEl, setMobileMenuAnchorEl] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [openLoginDialog, setOpenLoginDialog] = useState(false);
+  const [openCreateAccountDialog, setOpenCreateAccountDialog] = useState(false);
+  const [openForgotPasswordDialog, setOpenForgotPasswordDialog] = useState(false);
 
-  const handleLoginOpen = () => {
-    setLoginOpen(true);
-    setCreateAccountOpen(false);
-    setForgotPasswordOpen(false);
-  };
-  const handleLoginClose = () => setLoginOpen(false);
-  const handleCreateAccountOpen = () => {
-    setCreateAccountOpen(true);
-    setLoginOpen(false);
-    setForgotPasswordOpen(false);
-  };
-  const handleCreateAccountClose = () => setCreateAccountOpen(false);
-  const handleForgotPasswordOpen = () => {
-    setForgotPasswordOpen(true);
-    setLoginOpen(false);
-    setCreateAccountOpen(false);
-  };
-  const handleForgotPasswordClose = () => setForgotPasswordOpen(false);
-
-  const handleLoginSuccess = () => {
-    setIsLoggedIn(true);
-    setLoginOpen(false);
+  const handleMenu = (event) => {
+    setAnchorEl(event.currentTarget);
   };
 
-  const handleCreateAccountSuccess = () => {
-    setIsLoggedIn(true);
-    setCreateAccountOpen(false);
+  const handleClose = () => {
+    setAnchorEl(null);
   };
 
-  const handleMenuOpen = (event) => setAnchorEl(event.currentTarget);
-  const handleMenuClose = () => setAnchorEl(null);
-  const handleMobileMenuOpen = (event) => setMobileMenuAnchorEl(event.currentTarget);
-  const handleMobileMenuClose = () => setMobileMenuAnchorEl(null);
+  const handleLogin = () => {
+    handleClose();
+    setOpenLoginDialog(true);
+  };
+
+  const handleCreateAccount = () => {
+    handleClose();
+    setOpenCreateAccountDialog(true);
+  };
+
+  const handleForgotPassword = () => {
+    handleClose();
+    setOpenForgotPasswordDialog(true);
+  };
 
   const handleLogout = () => {
     setIsLoggedIn(false);
-    setAnchorEl(null);
-    setMobileMenuAnchorEl(null);
+    handleClose();
+  };
+
+  const handleLoginSuccess = () => {
+    setIsLoggedIn(true);
+    setOpenLoginDialog(false);
   };
 
   return (
@@ -81,98 +67,61 @@ export default function App() {
       <CssBaseline />
       <Router>
         <div className="app">
-          <AppBar position="static" className="app-bar">
+          <AppBar position="static">
             <Toolbar>
-              <Link to="/" className="logo-link">
-                <img src="https://fdh-logo.s3.us-east-2.amazonaws.com/JobSyncCorner.png" alt="JobSync Logo" className="logo" />
-              </Link>
-              <Typography variant="h6" component="div" className="app-title">
-              </Typography>
-              <nav className="nav-links desktop-nav">
-                <Button color="inherit" component={Link} to="/resume-analyzer">Resume Analyzer</Button>
-                <Button color="inherit" component={Link} to="/job-matcher">Job Matcher</Button>
-              </nav>
-              <IconButton
-                color="inherit"
-                aria-label="menu"
-                onClick={handleMobileMenuOpen}
-                className="mobile-menu-button"
-              >
-                <MenuIcon />
+              <Box component={Link} to="/" sx={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
+                <img src="https://fdh-logo.s3.us-east-2.amazonaws.com/JobSyncCorner.png" alt="JobSync Logo" style={{ height: '40px', marginRight: '10px' }} />
+              </Box>
+              <div style={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}>
+                <Button color="inherit" component={Link} to="/resume-analyzer">RESUME ANALYZER</Button>
+                <Button color="inherit" component={Link} to="/job-matcher">JOB MATCHER</Button>
+              </div>
+              <IconButton color="inherit" edge="end" onClick={handleMenu}>
+                <AccountCircleIcon />
               </IconButton>
-              {isLoggedIn ? (
-                <>
-                  <IconButton
-                    color="inherit"
-                    onClick={handleMenuOpen}
-                    style={{ color: 'green' }}
-                  >
-                    <AccountCircle />
-                  </IconButton>
-                  <Menu
-                    anchorEl={anchorEl}
-                    open={Boolean(anchorEl)}
-                    onClose={handleMenuClose}
-                  >
-                    <MenuItem component={Link} to="/settings" onClick={handleMenuClose}>Settings</MenuItem>
-                    <MenuItem onClick={handleLogout}>Logout</MenuItem>
-                  </Menu>
-                </>
-              ) : (
-                <IconButton
-                  color="inherit"
-                  onClick={handleLoginOpen}
-                  style={{ color: 'inherit' }}
-                >
-                  <AccountCircle />
-                </IconButton>
-              )}
+              <Menu
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+              >
+                {isLoggedIn ? (
+                  <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                ) : (
+                  [
+                    <MenuItem key="login" onClick={handleLogin}>Login</MenuItem>,
+                    <MenuItem key="create" onClick={handleCreateAccount}>Create Account</MenuItem>,
+                    <MenuItem key="forgot" onClick={handleForgotPassword}>Forgot Password</MenuItem>
+                  ]
+                )}
+              </Menu>
             </Toolbar>
           </AppBar>
 
-          <Menu
-            anchorEl={mobileMenuAnchorEl}
-            open={Boolean(mobileMenuAnchorEl)}
-            onClose={handleMobileMenuClose}
-            className="mobile-menu"
-          >
-            <MenuItem component={Link} to="/resume-analyzer" onClick={handleMobileMenuClose}>Resume Analyzer</MenuItem>
-            <MenuItem component={Link} to="/job-matcher" onClick={handleMobileMenuClose}>Job Matcher</MenuItem>
-          </Menu>
-
-          <LoginDialog 
-            open={loginOpen} 
-            onClose={handleLoginClose} 
-            onLoginSuccess={handleLoginSuccess}
-            onCreateAccount={handleCreateAccountOpen}
-            onForgotPassword={handleForgotPasswordOpen}
-          />
-
-          <CreateAccountDialog
-            open={createAccountOpen}
-            onClose={handleCreateAccountClose}
-            onCreateSuccess={handleCreateAccountSuccess}
-          />
-
-          <ForgotPasswordDialog
-            open={forgotPasswordOpen}
-            onClose={handleForgotPasswordClose}
-            onBackToLogin={handleLoginOpen}
-          />
-          
-          <Container maxWidth="lg" className="main-content">
+          <Container maxWidth="lg" style={{ marginTop: '20px' }}>
             <Routes>
-              <Route path="/" element={<HomePage />} />
+              <Route path="/" element={<Home />} />
               <Route path="/resume-analyzer" element={<ResumeAnalyzer />} />
               <Route path="/resume-analysis" element={<ResumeAnalysisPage />} />
               <Route path="/job-matcher" element={<JobMatcher />} />
-              <Route path="/settings" element={<SettingsPage />} />
             </Routes>
           </Container>
 
-          <Footer />
+          <LoginDialog open={openLoginDialog} onClose={() => setOpenLoginDialog(false)} onLogin={handleLoginSuccess} />
+          <CreateAccountDialog open={openCreateAccountDialog} onClose={() => setOpenCreateAccountDialog(false)} />
+          <ForgotPasswordDialog open={openForgotPasswordDialog} onClose={() => setOpenForgotPasswordDialog(false)} />
         </div>
       </Router>
     </ThemeProvider>
   );
 }
+
+export default App;

@@ -1,71 +1,46 @@
 import React, { useState } from 'react';
-import { Dialog, DialogContent, Button, TextField, Typography, Link, FormControlLabel, Checkbox } from '@mui/material';
-import './LoginDialog.css';
+import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button } from '@mui/material';
 
-export default function LoginDialog({ open, onClose, onLoginSuccess, onCreateAccount, onForgotPassword }) {
-  const [email, setEmail] = useState('');
+export default function LoginDialog({ open, onClose, onLogin }) {
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [rememberMe, setRememberMe] = useState(false);
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    console.log('Logging in with:', { email, password, rememberMe });
-    onLoginSuccess();
+  const handleLogin = () => {
+    // Here you would typically make an API call to verify credentials
+    // For this example, we'll just simulate a successful login
+    console.log('Logging in with:', username, password);
+    if (onLogin && typeof onLogin === 'function') {
+      onLogin();
+    }
     onClose();
   };
 
   return (
-    <Dialog open={open} onClose={onClose} className="login-dialog">
+    <Dialog open={open} onClose={onClose}>
+      <DialogTitle>Login</DialogTitle>
       <DialogContent>
-        <form className="form-container" onSubmit={handleLogin}>
-          <h1 className="form-title primary">Log In</h1>
-          <div className="input-container">
-            <label htmlFor="email">Email*</label>
-            <TextField
-              required
-              type="email"
-              id="email"
-              placeholder="example@xyz.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              fullWidth
-            />
-          </div>
-          <div className="input-container">
-            <label htmlFor="password">Password*</label>
-            <TextField
-              required
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              fullWidth
-            />
-          </div>
-          <div className="forget-password flex-row">
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
-                  name="remember-me"
-                  color="primary"
-                />
-              }
-              label="Remember me"
-            />
-            <Link href="#" className="text-medium primary" onClick={onForgotPassword}>
-              Forgot your password?
-            </Link>
-          </div>
-          <Button type="submit" className="btn btn-primary" fullWidth>
-            Log In
-          </Button>
-          <Typography className="text-medium" align="center" style={{ marginTop: '1rem' }}>
-            Don't have an account? <Link href="#" onClick={onCreateAccount}>Create an account</Link>
-          </Typography>
-        </form>
+        <TextField
+          autoFocus
+          margin="dense"
+          label="Username"
+          type="text"
+          fullWidth
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <TextField
+          margin="dense"
+          label="Password"
+          type="password"
+          fullWidth
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
       </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose}>Cancel</Button>
+        <Button onClick={handleLogin}>Login</Button>
+      </DialogActions>
     </Dialog>
   );
 }

@@ -1,11 +1,9 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
-require('dotenv').config();
-const apiKey = process.env.Fire_API_KEY;
 
 const firebaseConfig = {
-    apiKey: apiKey,
+    apiKey: "AIzaSyB87AE80iTcHeBNMzqN7AtdVouVja9d5Pg",
     authDomain: "jobsync-3be06.firebaseapp.com",
     projectId: "jobsync-3be06",
     storageBucket: "jobsync-3be06.appspot.com",

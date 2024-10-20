@@ -1,82 +1,142 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Container, Grid, Paper, Typography, TextField, Button, CircularProgress } from '@mui/material';
-import { Send as SendIcon } from '@mui/icons-material';
-import './ResumeAnalysisPage.css';
+import SendIcon from '@mui/icons-material/Send';
+import RefreshIcon from '@mui/icons-material/Refresh';
 
 export default function ResumeAnalysisPage() {
-  const [resumeContent, setResumeContent] = useState('');
-  const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState('');
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { analysis, resumeContent, recruiterRequirements } = location.state || {};
+
+  const [chatInput, setChatInput] = useState('');
+  const [chatHistory, setChatHistory] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
-    // Simulating fetching the resume content
-    // In a real application, you would fetch this from your backend
-    setResumeContent('This is a sample resume content. Replace this with the actual resume.');
-  }, []);
+    if (analysis) {
+      const formattedAnalysis = formatAnalysis(analysis);
+      setChatHistory([{ type: 'ai', message: formattedAnalysis }]);
+    } else {
+      setError(true);
+      setChatHistory([{ type: 'ai', message: "I apologize, but I encountered an error while analyzing the resume. Could you please try uploading the resume again?" }]);
+    }
+  }, [analysis]);
 
-  const handleSendMessage = async () => {
-    if (!input.trim()) return;
-
-    const userMessage = { text: input, sender: 'user' };
-    setMessages([...messages, userMessage]);
-    setInput('');
-    setLoading(true);
-
+  const formatAnalysis = (analysisText) => {
+    if (!analysisText || typeof analysisText !== 'string') {
+      return "I'm sorry, but I don't have enough information to provide an analysis of the candidate's resume.";
+    }
+    
     try {
-      // Simulating API call to Gemini
-      // In a real application, you would make an actual API call here
-      const response = await new Promise(resolve => 
-        setTimeout(() => resolve({ text: `Response to: ${input}` }), 1000)
-      );
+      const sections = analysisText.split('**').filter(section => section.trim() !== '');
+      const overallImpression = sections.find(section => section.toLowerCase().includes('overall impression'));
+      const strengths = sections.find(section => section.toLowerCase().includes('strengths'));
+      const skills = sections.find(section => section.toLowerCase().includes('technical skills'));
 
-      const aiMessage = { text: response.text, sender: 'ai' };
-      setMessages(prevMessages => [...prevMessages, aiMessage]);
+      let formattedResponse = "Based on the resume analysis, ";
+      if (overallImpression) {
+        formattedResponse += overallImpression.split(':')[1].trim() + " ";
+      }
+      if (strengths) {
+        formattedResponse += "The candidate's key strengths include " + strengths.split(':')[1].split('*')[0].trim() + ". ";
+      }
+      if (skills) {
+        formattedResponse += "Their technical skills encompass " + skills.split(':')[1].split('*')[0].trim() + ". ";
+      }
+      formattedResponse += "Overall, the candidate appears to have a strong background in software engineering with relevant experience and a diverse skill set. However, for a more comprehensive evaluation, it would be beneficial to compare their qualifications directly with the specific job requirements.";
+
+      return formattedResponse;
     } catch (error) {
-      console.error('Error fetching response:', error);
-    } finally {
-      setLoading(false);
+      console.error('Error formatting analysis:', error);
+      setError(true);
+      return "I apologize, but I encountered an error while analyzing the resume. Could you please try uploading the resume again?";
     }
   };
 
+  const handleSendMessage = async () => {
+    if (!chatInput.trim()) return;
+
+    setLoading(true);
+    setChatHistory(prev => [...prev, { type: 'user', message: chatInput }]);
+    setChatInput('');
+
+    // Simulating AI response
+    setTimeout(() => {
+      setChatHistory(prev => [...prev, { type: 'ai', message: `Thank you for your question about the candidate. Based on the resume analysis, the candidate appears to be well-qualified for a software engineering position. They have demonstrated strong technical skills, relevant work experience, and quantifiable achievements in their previous roles. However, to provide a more specific answer to your question, I would need to compare the candidate's qualifications directly to the job requirements. Is there a particular aspect of their background you'd like me to focus on?` }]);
+      setLoading(false);
+    }, 1000);
+  };
+
+  const handleRetry = () => {
+    navigate('/resume-analyzer');
+  };
+
   return (
-    <Container maxWidth="xl" className="resume-analysis-page">
-      <Grid container spacing={2}>
-        <Grid item xs={12} md={6}>
-          <Paper elevation={3} className="resume-paper">
-            <Typography variant="h6" gutterBottom>Your Resume</Typography>
-            <Typography variant="body1">{resumeContent}</Typography>
+    <Container maxWidth="lg">
+      <Typography variant="h4" gutterBottom>
+        Resume Analysis Results
+      </Typography>
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={4}>
+          <Paper elevation={3} style={{ padding: '20px', height: '600px', overflowY: 'auto' }}>
+            <Typography variant="h6" gutterBottom>
+              Resume
+            </Typography>
+            {resumeContent ? (
+              <img src={resumeContent} alt="Resume" style={{ maxWidth: '100%' }} />
+            ) : (
+              <Typography>No resume content available.</Typography>
+            )}
           </Paper>
         </Grid>
-        <Grid item xs={12} md={6}>
-          <Paper elevation={3} className="chat-paper">
-            <Typography variant="h6" gutterBottom>Chat with AI</Typography>
-            <div className="chat-messages">
-              {messages.map((message, index) => (
-                <div key={index} className={`message ${message.sender}`}>
-                  <Typography variant="body1">{message.text}</Typography>
-                </div>
+        <Grid item xs={12} md={8}>
+          <Paper elevation={3} style={{ padding: '20px', height: '600px', display: 'flex', flexDirection: 'column' }}>
+            <Typography variant="h6" gutterBottom>
+              Chat
+            </Typography>
+            <div style={{ flexGrow: 1, overflowY: 'auto', marginBottom: '20px' }}>
+              {chatHistory.map((chat, index) => (
+                <Typography key={index} style={{ marginBottom: '10px', color: chat.type === 'user' ? 'blue' : 'green' }}>
+                  <strong>{chat.type === 'user' ? 'You: ' : 'AI: '}</strong>{chat.message}
+                </Typography>
               ))}
             </div>
-            <div className="chat-input">
-              <TextField
-                fullWidth
-                variant="outlined"
-                placeholder="Ask a question about your resume..."
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-              />
+            {error && (
               <Button
                 variant="contained"
-                color="primary"
-                endIcon={loading ? <CircularProgress size={20} /> : <SendIcon />}
-                onClick={handleSendMessage}
-                disabled={loading}
+                color="secondary"
+                startIcon={<RefreshIcon />}
+                onClick={handleRetry}
+                style={{ marginBottom: '20px' }}
               >
-                Send
+                Retry Analysis
               </Button>
-            </div>
+            )}
+            <Grid container spacing={2} alignItems="center">
+              <Grid item xs>
+                <TextField
+                  fullWidth
+                  variant="outlined"
+                  placeholder="Ask a question about the analysis..."
+                  value={chatInput}
+                  onChange={(e) => setChatInput(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                />
+              </Grid>
+              <Grid item>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  endIcon={loading ? <CircularProgress size={20} /> : <SendIcon />}
+                  onClick={handleSendMessage}
+                  disabled={loading || !chatInput.trim()}
+                >
+                  Send
+                </Button>
+              </Grid>
+            </Grid>
           </Paper>
         </Grid>
       </Grid>
