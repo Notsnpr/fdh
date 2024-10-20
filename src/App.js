@@ -5,6 +5,7 @@ import { AccountCircle, Menu as MenuIcon } from '@mui/icons-material';
 import ResumeAnalyzer from './Components/ResumeAnalyzer';
 import JobMatcher from './Components/JobMatcher';
 import LoginDialog from './Components/LoginDialog';
+import Footer from './Components/Footer';
 import './App.css';
 
 const Home = () => (
@@ -55,6 +56,7 @@ export default function App() {
               <img src="https://fdh-logo.s3.us-east-2.amazonaws.com/JobSyncCorner.png" alt="JobSync Logo" className="logo" />
             </Link>
             <Typography variant="h6" component="div" className="app-title">
+              JobSync
             </Typography>
             <nav className="nav-links desktop-nav">
               <Button color="inherit" component={Link} to="/resume-analyzer">Resume Analyzer</Button>
@@ -117,6 +119,8 @@ export default function App() {
             <Route path="/job-matcher" element={<JobMatcher />} />
           </Routes>
         </Container>
+
+        <Footer />
       </div>
     </Router>
   );

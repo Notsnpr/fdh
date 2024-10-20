@@ -1,52 +1,74 @@
 import React, { useState } from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Typography } from '@mui/material';
-import './LoginDialog.css'
+import { Dialog, DialogContent, Button, Checkbox, FormControlLabel, Link } from '@mui/material';
+import './LoginDialog.css';
 
-export default function LoginDialog({ open, onClose, onLoginSuccess }) { //Added onLoginSuccess 
+export default function LoginDialog({ open, onClose, onLoginSuccess }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
 
-  const handleLogin = () => {
-    console.log('Logging in with:', { email, password });
-    onLoginSuccess(); //Notify that the user has logged in
+  const handleLogin = (e) => {
+    e.preventDefault();
+    console.log('Logging in with:', { email, password, rememberMe });
+    onLoginSuccess();
     onClose();
   };
-  
 
   return (
     <Dialog open={open} onClose={onClose} className="login-dialog">
-      <DialogTitle>Login to Your Account</DialogTitle>
       <DialogContent>
-        <Typography variant="body1" gutterBottom>
-          Please enter your email and password to login.
-        </Typography>
-        <TextField
-          label="Email"
-          type="email"
-          fullWidth
-          variant="outlined"
-          margin="dense"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <TextField
-          label="Password"
-          type="password"
-          fullWidth
-          variant="outlined"
-          margin="dense"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        <form className="form-container" onSubmit={handleLogin}>
+          <h1 className="form-title primary">Log In</h1>
+          <div className="input-container">
+            <label htmlFor="email">Email*</label>
+            <input
+              required
+              type="email"
+              name="email"
+              id="email"
+              placeholder="example@xyz.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+          <div className="input-container">
+            <label htmlFor="password">Password*</label>
+            <input
+              required
+              type="password"
+              name="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+          <div className="forget-password flex-row">
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  name="remember-me"
+                  color="primary"
+                />
+              }
+              label="Remember me"
+            />
+            <Link href="#" className="text-medium primary">
+              Forget your password?
+            </Link>
+          </div>
+          <Button type="submit" className="btn btn-primary" fullWidth>
+            Log In
+          </Button>
+          <p className="text-medium">
+            Don't have an account?{' '}
+            <Link href="#" className="text-medium primary">
+              Create an account
+            </Link>
+          </p>
+        </form>
       </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose} color="secondary">
-          Cancel
-        </Button>
-        <Button onClick={handleLogin} color="primary">
-          Login
-        </Button>
-      </DialogActions>
     </Dialog>
   );
 }
