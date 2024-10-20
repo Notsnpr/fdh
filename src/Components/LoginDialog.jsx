@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Dialog, DialogContent, Button, Checkbox, FormControlLabel, Link } from '@mui/material';
+import { Dialog, DialogContent, Button, TextField, Typography, Link, FormControlLabel, Checkbox } from '@mui/material';
 import './LoginDialog.css';
 
-export default function LoginDialog({ open, onClose, onLoginSuccess }) {
+export default function LoginDialog({ open, onClose, onLoginSuccess, onCreateAccount, onForgotPassword }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
@@ -21,25 +21,25 @@ export default function LoginDialog({ open, onClose, onLoginSuccess }) {
           <h1 className="form-title primary">Log In</h1>
           <div className="input-container">
             <label htmlFor="email">Email*</label>
-            <input
+            <TextField
               required
               type="email"
-              name="email"
               id="email"
               placeholder="example@xyz.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              fullWidth
             />
           </div>
           <div className="input-container">
             <label htmlFor="password">Password*</label>
-            <input
+            <TextField
               required
               type="password"
-              name="password"
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              fullWidth
             />
           </div>
           <div className="forget-password flex-row">
@@ -54,19 +54,16 @@ export default function LoginDialog({ open, onClose, onLoginSuccess }) {
               }
               label="Remember me"
             />
-            <Link href="#" className="text-medium primary">
-              Forget your password?
+            <Link href="#" className="text-medium primary" onClick={onForgotPassword}>
+              Forgot your password?
             </Link>
           </div>
           <Button type="submit" className="btn btn-primary" fullWidth>
             Log In
           </Button>
-          <p className="text-medium">
-            Don't have an account?{' '}
-            <Link href="#" className="text-medium primary">
-              Create an account
-            </Link>
-          </p>
+          <Typography className="text-medium" align="center" style={{ marginTop: '1rem' }}>
+            Don't have an account? <Link href="#" onClick={onCreateAccount}>Create an account</Link>
+          </Typography>
         </form>
       </DialogContent>
     </Dialog>

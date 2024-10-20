@@ -3,8 +3,11 @@ import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Container, Button, IconButton, Menu, MenuItem, Grid } from '@mui/material';
 import { AccountCircle, Menu as MenuIcon } from '@mui/icons-material';
 import ResumeAnalyzer from './Components/ResumeAnalyzer';
+import ResumeAnalysisPage from './Components/ResumeAnalysisPage';
 import JobMatcher from './Components/JobMatcher';
 import LoginDialog from './Components/LoginDialog';
+import CreateAccountDialog from './Components/CreateAccountDialog';
+import ForgotPasswordDialog from './Components/ForgotPasswordDialog';
 import Footer from './Components/Footer';
 import './App.css';
 
@@ -25,15 +28,39 @@ const Home = () => (
 
 export default function App() {
   const [loginOpen, setLoginOpen] = useState(false);
+  const [createAccountOpen, setCreateAccountOpen] = useState(false);
+  const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMenuAnchorEl, setMobileMenuAnchorEl] = useState(null);
 
-  const handleLoginOpen = () => setLoginOpen(true);
+  const handleLoginOpen = () => {
+    setLoginOpen(true);
+    setCreateAccountOpen(false);
+    setForgotPasswordOpen(false);
+  };
   const handleLoginClose = () => setLoginOpen(false);
+  const handleCreateAccountOpen = () => {
+    setCreateAccountOpen(true);
+    setLoginOpen(false);
+    setForgotPasswordOpen(false);
+  };
+  const handleCreateAccountClose = () => setCreateAccountOpen(false);
+  const handleForgotPasswordOpen = () => {
+    setForgotPasswordOpen(true);
+    setLoginOpen(false);
+    setCreateAccountOpen(false);
+  };
+  const handleForgotPasswordClose = () => setForgotPasswordOpen(false);
+
   const handleLoginSuccess = () => {
     setIsLoggedIn(true);
     setLoginOpen(false);
+  };
+
+  const handleCreateAccountSuccess = () => {
+    setIsLoggedIn(true);
+    setCreateAccountOpen(false);
   };
 
   const handleMenuOpen = (event) => setAnchorEl(event.currentTarget);
@@ -56,7 +83,6 @@ export default function App() {
               <img src="https://fdh-logo.s3.us-east-2.amazonaws.com/JobSyncCorner.png" alt="JobSync Logo" className="logo" />
             </Link>
             <Typography variant="h6" component="div" className="app-title">
-              JobSync
             </Typography>
             <nav className="nav-links desktop-nav">
               <Button color="inherit" component={Link} to="/resume-analyzer">Resume Analyzer</Button>
@@ -110,12 +136,31 @@ export default function App() {
           <MenuItem component={Link} to="/job-matcher" onClick={handleMobileMenuClose}>Job Matcher</MenuItem>
         </Menu>
 
-        <LoginDialog open={loginOpen} onClose={handleLoginClose} onLoginSuccess={handleLoginSuccess} />
+        <LoginDialog 
+          open={loginOpen} 
+          onClose={handleLoginClose} 
+          onLoginSuccess={handleLoginSuccess}
+          onCreateAccount={handleCreateAccountOpen}
+          onForgotPassword={handleForgotPasswordOpen}
+        />
+
+        <CreateAccountDialog
+          open={createAccountOpen}
+          onClose={handleCreateAccountClose}
+          onCreateSuccess={handleCreateAccountSuccess}
+        />
+
+        <ForgotPasswordDialog
+          open={forgotPasswordOpen}
+          onClose={handleForgotPasswordClose}
+          onBackToLogin={handleLoginOpen}
+        />
         
         <Container maxWidth="lg" className="main-content">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/resume-analyzer" element={<ResumeAnalyzer />} />
+            <Route path="/resume-analysis" element={<ResumeAnalysisPage />} />
             <Route path="/job-matcher" element={<JobMatcher />} />
           </Routes>
         </Container>
