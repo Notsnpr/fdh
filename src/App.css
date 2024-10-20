@@ -1,3 +1,9 @@
+body {
+  background-color: #D3D3D3;
+  margin: 0;
+  padding: 0;
+}
+
 .app {
   min-height: 100vh;
   display: flex;
@@ -7,18 +13,26 @@
 .app-bar {
   background-color: #ffffff !important;
   color: #333333 !important;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.logo-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
 }
 
 .logo {
-  height: 70px;
-  margin-right: -100px;
+  height: 60px;
+  margin-right: 10px;
 }
 
 .app-title {
   font-weight: bold !important;
   color: #2196f3 !important;
   flex-grow: 1;
+  font-size: 1.5rem !important;
 }
 
 .nav-links {
@@ -33,5 +47,45 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  text-align: center;
+  background-color: #ffffff;
+  margin: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.mobile-menu-button {
+  display: none !important;
+}
+
+@media (max-width: 768px) {
+  .desktop-nav {
+    display: none;
+  }
+
+  .mobile-menu-button {
+    display: block !important;
+  }
+
+  .logo {
+    height: 50px;
+  }
+
+  .app-title {
+    font-size: 1.2rem !important;
+  }
+
+  .main-content {
+    padding: 10px;
+    margin: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo {
+    height: 40px;
+  }
+
+  .app-title {
+    font-size: 1rem !important;
+  }
 }

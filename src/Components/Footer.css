@@ -1,0 +1,15 @@
+.footer {
+    background-color: #B4D4FF;
+    padding: 3rem 0;
+    margin-top: 2rem;
+  }
+  
+  .social-icon {
+    margin-right: 1rem;
+  }
+  
+  @media (max-width: 600px) {
+    .footer {
+      padding: 2rem 0;
+    }
+  }
