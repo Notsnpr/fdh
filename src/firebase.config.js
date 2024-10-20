@@ -1,21 +1,21 @@
+// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
-require('dotenv').config();
-const apiKey = process.env.Fire_API_KEY;
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
 
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    apiKey: apiKey,
-    authDomain: "jobsync-3be06.firebaseapp.com",
-    projectId: "jobsync-3be06",
-    storageBucket: "jobsync-3be06.appspot.com",
-    messagingSenderId: "1091251412290",
-    appId: "1:1091251412290:web:5a958f307df74d24917cdb",
-    measurementId: "G-H2585G4EZ9"
-  };
+  apiKey: "AIzaSyD0wvPBwjJVegw2nyGbGLVPIPRSBNfcZl4",
+  authDomain: "jobsync-6e749.firebaseapp.com",
+  projectId: "jobsync-6e749",
+  storageBucket: "jobsync-6e749.appspot.com",
+  messagingSenderId: "473707641478",
+  appId: "1:473707641478:web:378f1d4b0aeec626f72f07",
+  measurementId: "G-R9MSLVYLQE"
+};
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const auth = getAuth(app);
-
-export { db, auth };
+const analytics = getAnalytics(app);
