@@ -11,6 +11,7 @@ import ForgotPasswordDialog from './Components/ForgotPasswordDialog';
 import SettingsPage from './Components/SettingsPage';
 import Footer from './Components/Footer';
 import HomePage from './Components/Home';
+import { db, auth } from './firebase.js';
 import './App.css';
 
 const theme = createTheme({

@@ -3,7 +3,7 @@
 //import { useState } from 'react';
 //const { useState } = require("react");
 require('dotenv').config();
-const apiKey = process.env.API_KEY;
+const apiKey = process.env.Gemini_API_KEY;
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const { GoogleAIFileManager } = require("@google/generative-ai/server");
 
