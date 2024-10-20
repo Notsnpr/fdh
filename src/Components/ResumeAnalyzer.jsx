@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Typography, CircularProgress } from '@mui/material';
+import { Button, Typography, CircularProgress, Grid } from '@mui/material';
 import './ResumeAnalyzer.css';
 
 export default function ResumeAnalyzer() {
@@ -36,33 +36,37 @@ export default function ResumeAnalyzer() {
   };
 
   return (
-    <div className="resume-analyzer">
-      <Typography variant="h5" gutterBottom>
-        Resume Analyzer
-      </Typography>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="file"
-          accept=".pdf,.doc,.docx"
-          onChange={handleFileChange}
-          className="file-input"
-        />
-        <Button
-          variant="contained"
-          color="primary"
-          type="submit"
-          disabled={!file || loading}
-          className="submit-button"
-        >
-          {loading ? <CircularProgress size={24} /> : 'Analyze Resume'}
-        </Button>
-      </form>
+    <Grid container spacing={2} className="resume-analyzer">
+      <Grid item xs={12}>
+        <Typography variant="h5" gutterBottom>
+          Resume Analyzer
+        </Typography>
+      </Grid>
+      <Grid item xs={12}>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="file"
+            accept=".pdf,.doc,.docx"
+            onChange={handleFileChange}
+            className="file-input"
+          />
+          <Button
+            variant="contained"
+            color="primary"
+            type="submit"
+            disabled={!file || loading}
+            className="submit-button"
+          >
+            {loading ? <CircularProgress size={24} /> : 'Analyze Resume'}
+          </Button>
+        </form>
+      </Grid>
       {analysis && (
-        <div className="analysis-results">
+        <Grid item xs={12} className="analysis-results">
           <Typography variant="h6">Analysis Results:</Typography>
           <pre>{JSON.stringify(analysis, null, 2)}</pre>
-        </div>
+        </Grid>
       )}
-    </div>
+    </Grid>
   );
 }

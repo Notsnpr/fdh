@@ -1,61 +1,50 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
-import { AppBar, Toolbar, Typography, Container, Button, IconButton, Menu, MenuItem } from '@mui/material';
-import { AccountCircle } from '@mui/icons-material';
+import { AppBar, Toolbar, Typography, Container, Button, IconButton, Menu, MenuItem, Grid } from '@mui/material';
+import { AccountCircle, Menu as MenuIcon } from '@mui/icons-material';
 import ResumeAnalyzer from './Components/ResumeAnalyzer';
 import JobMatcher from './Components/JobMatcher';
 import LoginDialog from './Components/LoginDialog';
 import './App.css';
 
 const Home = () => (
-  <>
-    <Typography variant="h4" component="h1" gutterBottom>
-      Welcome to JobSync
-    </Typography>
-    <Typography variant="body1">
-      Your intelligent resume analyzer and job matching assistant.
-    </Typography>
-  </>
+  <Grid container spacing={2} justifyContent="center">
+    <Grid item xs={12}>
+      <Typography variant="h4" component="h1" gutterBottom align="center">
+        Welcome to JobSync
+      </Typography>
+    </Grid>
+    <Grid item xs={12} sm={8} md={6}>
+      <Typography variant="body1" align="center">
+        Your intelligent resume analyzer and job matching assistant.
+      </Typography>
+    </Grid>
+  </Grid>
 );
 
 export default function App() {
   const [loginOpen, setLoginOpen] = useState(false);
-  //Track login state
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  //Dropdown Menu state
   const [anchorEl, setAnchorEl] = useState(null);
+  const [mobileMenuAnchorEl, setMobileMenuAnchorEl] = useState(null);
 
-  const handleLoginOpen = () => {
-    setLoginOpen(true);
-  };
-
-  const handleLoginClose = () => {
-    setLoginOpen(false);
-  };
-
+  const handleLoginOpen = () => setLoginOpen(true);
+  const handleLoginClose = () => setLoginOpen(false);
   const handleLoginSuccess = () => {
-    //Set user as logged in after successful login
-    setIsLoggedIn(true); 
-    //Close the dialog
+    setIsLoggedIn(true);
     setLoginOpen(false);
   };
 
-  const handleMenuOpen = (event) => {
-    //Open dropdown menu
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    //Close dropdown menu
-    setAnchorEl(null);
-  };
+  const handleMenuOpen = (event) => setAnchorEl(event.currentTarget);
+  const handleMenuClose = () => setAnchorEl(null);
+  const handleMobileMenuOpen = (event) => setMobileMenuAnchorEl(event.currentTarget);
+  const handleMobileMenuClose = () => setMobileMenuAnchorEl(null);
 
   const handleLogout = () => {
-    //Log out the user
     setIsLoggedIn(false);
-    //Close dropdown menu
     setAnchorEl(null);
-  }
+    setMobileMenuAnchorEl(null);
+  };
 
   return (
     <Router>
@@ -65,13 +54,20 @@ export default function App() {
             <Link to="/" className="logo-link">
               <img src="https://fdh-logo.s3.us-east-2.amazonaws.com/JobSyncCorner.png" alt="JobSync Logo" className="logo" />
             </Link>
-            <Typography variant="h6" component="div" className="app-title"></Typography>
-            <nav className="nav-links">
+            <Typography variant="h6" component="div" className="app-title">
+            </Typography>
+            <nav className="nav-links desktop-nav">
               <Button color="inherit" component={Link} to="/resume-analyzer">Resume Analyzer</Button>
               <Button color="inherit" component={Link} to="/job-matcher">Job Matcher</Button>
             </nav>
-            {/* Login Icon Button */} 
-            {/* Color changes based on login status */}
+            <IconButton
+              color="inherit"
+              aria-label="menu"
+              onClick={handleMobileMenuOpen}
+              className="mobile-menu-button"
+            >
+              <MenuIcon />
+            </IconButton>
             {isLoggedIn ? (
               <>
                 <IconButton
@@ -82,7 +78,7 @@ export default function App() {
                   <AccountCircle />
                 </IconButton>
                 <Menu
-                  anchorEl ={anchorEl}
+                  anchorEl={anchorEl}
                   open={Boolean(anchorEl)}
                   onClose={handleMenuClose}
                 >
@@ -97,10 +93,20 @@ export default function App() {
                 style={{ color: 'inherit' }}
               >
                 <AccountCircle />
-            </IconButton>
-          )}
+              </IconButton>
+            )}
           </Toolbar>
         </AppBar>
+
+        <Menu
+          anchorEl={mobileMenuAnchorEl}
+          open={Boolean(mobileMenuAnchorEl)}
+          onClose={handleMobileMenuClose}
+          className="mobile-menu"
+        >
+          <MenuItem component={Link} to="/resume-analyzer" onClick={handleMobileMenuClose}>Resume Analyzer</MenuItem>
+          <MenuItem component={Link} to="/job-matcher" onClick={handleMobileMenuClose}>Job Matcher</MenuItem>
+        </Menu>
 
         <LoginDialog open={loginOpen} onClose={handleLoginClose} onLoginSuccess={handleLoginSuccess} />
         
