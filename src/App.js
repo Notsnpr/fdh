@@ -8,6 +8,7 @@ import JobMatcher from './Components/JobMatcher';
 import LoginDialog from './Components/LoginDialog';
 import CreateAccountDialog from './Components/CreateAccountDialog';
 import ForgotPasswordDialog from './Components/ForgotPasswordDialog';
+import SettingsPage from './Components/SettingsPage';
 import Footer from './Components/Footer';
 import './App.css';
 
@@ -110,7 +111,7 @@ export default function App() {
                   open={Boolean(anchorEl)}
                   onClose={handleMenuClose}
                 >
-                  <MenuItem onClick={handleMenuClose}>Settings</MenuItem>
+                  <MenuItem component={Link} to="/settings" onClick={handleMenuClose}>Settings</MenuItem>
                   <MenuItem onClick={handleLogout}>Logout</MenuItem>
                 </Menu>
               </>
@@ -162,6 +163,7 @@ export default function App() {
             <Route path="/resume-analyzer" element={<ResumeAnalyzer />} />
             <Route path="/resume-analysis" element={<ResumeAnalysisPage />} />
             <Route path="/job-matcher" element={<JobMatcher />} />
+            <Route path="/settings" element={<SettingsPage />} />
           </Routes>
         </Container>
 
